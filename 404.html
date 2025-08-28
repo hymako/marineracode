@@ -2,6 +2,38 @@
 <html lang="es">
 
 <head>
+  <!-- Google tag (gtag.js) + Consent Mode v2 -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
+
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWYJ8T2Q7V"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-RWYJ8T2Q7V', {
+      send_page_view: true,
+      debug_mode: location.hostname === 'localhost'
+    });
+
+    window.addEventListener('hashchange', () => {
+      gtag('event', 'page_view', {
+        page_location: location.href,
+        page_title: document.title
+      });
+    });
+  </script>
+
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MarineraCode — Portfolio</title>
