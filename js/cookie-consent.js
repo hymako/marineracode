@@ -1,4 +1,3 @@
-// Cookie Consent para MarineraCode — GA4 (Consent Mode v2)
 (function () {
   const KEY = 'mc_consent'; // 'granted' | 'denied'
 
