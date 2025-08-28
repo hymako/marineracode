@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Política de Cookies – MarineraCode</title>
+  <style>
+    body{font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif;margin:24px;color:#241510;max-width:860px}
+    h1,h2{color:#241510}
+    .box{background:#fff;border:1px solid #eee;border-radius:12px;padding:16px}
+    .row{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+    .btn{border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;border:1px solid #ddd}
+    .btn-primary{background:#6b4a3b;color:#fff;border:0}
+  </style>
+</head>
+<body>
+  <h1>Política de Cookies</h1>
+  <p>En <strong>MarineraCode</strong> usamos cookies analíticas (Google Analytics 4) para entender el uso de la web y mejorar los contenidos y el rendimiento. Estas cookies solo se activan si das tu consentimiento.</p>
+
+  <h2>¿Qué cookies utilizamos?</h2>
+  <div class="box">
+    <p><strong>Google Analytics 4 (GA4):</strong> Analítica de uso del sitio. Mediante <em>Consent Mode v2</em>, si no das consentimiento, Google recibe señales sin cookies (medición agregada y limitada).</p>
+    <ul>
+      <li><strong>Responsable:</strong> Google LLC.</li>
+      <li><strong>Finalidad:</strong> estadísticas de uso del sitio.</li>
+      <li><strong>Base jurídica:</strong> consentimiento del usuario.</li>
+      <li><strong>Más info:</strong> <a href="https://policies.google.com/technologies/partner-sites?hl=es" target="_blank" rel="noreferrer">Cómo usa Google la información</a>.</li>
+    </ul>
+  </div>
+
+  <h2>Gestionar preferencias</h2>
+  <p>Puedes cambiar tu elección en cualquier momento:</p>
+  <div class="row">
+    <button class="btn btn-primary" onclick="CookieConsent.set('granted')">Aceptar analíticas</button>
+    <button class="btn" onclick="CookieConsent.set('denied')">Rechazar analíticas</button>
+    <button class="btn" onclick="CookieConsent.reset()">Restablecer (mostrar banner)</button>
+  </div>
+
+  <p style="margin-top:18px">También puedes gestionar las cookies desde la configuración de tu navegador.</p>
+
+  <!-- Carga gtag y el gestor de consentimiento igual que en index.html -->
+  <script>
+    // Consent por defecto (denegado) — requerido por la UE
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX', { send_page_view: true });
+  </script>
+  <script src="/js/cookie-consent.js"></script>
+</body>
+</html>
