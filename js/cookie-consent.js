@@ -1,42 +1,51 @@
-<script>
 // Cookie Consent para MarineraCode — GA4 (Consent Mode v2)
 (function () {
   const KEY = 'mc_consent'; // 'granted' | 'denied'
+
   const hasGtag = () => typeof window.gtag === 'function';
+
+  function applyToGA(state) {
+    if (!hasGtag()) return;
+    window.gtag('consent', 'update', {
+      analytics_storage: state === 'granted' ? 'granted' : 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+    });
+    // Dispara page_view si pasamos a granted ahora
+    if (state === 'granted') {
+      window.gtag('event', 'page_view', {
+        page_location: location.href,
+        page_title: document.title,
+      });
+    }
+  }
 
   function set(state) {
     localStorage.setItem(KEY, state);
-    if (hasGtag()) {
-      window.gtag('consent', 'update', {
-        analytics_storage: state === 'granted' ? 'granted' : 'denied',
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-      });
-      // dispara un page_view si pasamos a granted ahora
-      if (state === 'granted') {
-        window.gtag('event', 'page_view', {
-          page_location: location.href,
-          page_title: document.title,
-        });
-      }
-    }
+    applyToGA(state);
     hideBanner();
   }
 
-  function get() { return localStorage.getItem(KEY); }
+  function get() {
+    return localStorage.getItem(KEY);
+  }
 
   function reset() {
     localStorage.removeItem(KEY);
     showBanner();
   }
 
-  // --- Banner minimalista inyectado si no hay preferencia ---
+  // --- Banner minimalista accesible, inyectado si no hay preferencia ---
   function showBanner() {
     if (document.getElementById('mc-cookie-bar')) return;
 
     const bar = document.createElement('div');
     bar.id = 'mc-cookie-bar';
+    bar.setAttribute('role', 'dialog');
+    bar.setAttribute('aria-live', 'polite');
+    bar.setAttribute('aria-label', 'Aviso de cookies');
+
     bar.innerHTML = `
       <div style="
         position:fixed;left:0;right:0;bottom:0;z-index:9999;
@@ -50,6 +59,7 @@
           <button id="mc-reject" style="background:#f3f3f3;color:#241510;border:1px solid #ddd;border-radius:12px;padding:8px 14px;font-weight:600;cursor:pointer">Rechazar</button>
         </div>
       </div>`;
+
     document.body.appendChild(bar);
     document.getElementById('mc-accept').onclick = () => set('granted');
     document.getElementById('mc-reject').onclick = () => set('denied');
@@ -60,32 +70,16 @@
     if (bar) bar.remove();
   }
 
-  // Exponer API global (para /cookies.html o un enlace "Cambiar preferencias")
+  // Exponer API global (para /cookies.html o botones "Cambiar preferencias")
   window.CookieConsent = { set, get, reset, showBanner, hideBanner };
 
-  // Inicialización al cargar la página:
+  // --- Inicialización en carga ---
   const saved = get();
-  if (saved === 'granted') {
-    // ya aceptó en otra visita → aplica a GA
-    if (hasGtag()) {
-      window.gtag('consent', 'update', {
-        analytics_storage: 'granted',
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-      });
-    }
-  } else if (saved === 'denied') {
-    if (hasGtag()) {
-      window.gtag('consent', 'update', {
-        analytics_storage: 'denied',
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-      });
-    }
+  if (saved === 'granted' || saved === 'denied') {
+    // Ya teníamos elección → aplicar a GA y no mostrar banner
+    applyToGA(saved);
   } else {
-    // sin preferencia → mostrar banner
+    // Sin preferencia → mostrar banner
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', showBanner);
     } else {
@@ -93,4 +87,3 @@
     }
   }
 })();
-</script>
