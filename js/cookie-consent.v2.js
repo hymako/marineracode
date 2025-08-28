@@ -1,6 +1,7 @@
 (function () {
-  const KEY = 'mc_consent'; // 'granted' | 'denied'
-
+  if (window.__mcConsentInit) return;
+  window.__mcConsentInit = true;
+  const KEY = 'mc_consent';
   const hasGtag = () => typeof window.gtag === 'function';
 
   function applyToGA(state) {
@@ -11,7 +12,6 @@
       ad_user_data: 'denied',
       ad_personalization: 'denied',
     });
-    // Dispara page_view si pasamos a granted ahora
     if (state === 'granted') {
       window.gtag('event', 'page_view', {
         page_location: location.href,
@@ -85,4 +85,6 @@
       showBanner();
     }
   }
+
+  window.__mcConsent = { get, set, reset };
 })();
